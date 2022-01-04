@@ -18,3 +18,5 @@ Managed:
 - No reentrency
 - No overflow
 - No call from external contracts
+
+Better run this contract on Matic Network because chainlink fees are lower.

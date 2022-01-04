@@ -255,14 +255,12 @@ contract DuelCrypto is VRFConsumerBase, Ownable, ReentrancyGuard {
 
         requestIdDuelId[requestRandomness(rgKeyHash, rgFee)] = _duelId;
 
-        // duels[_duelId].winner = (randomNumber % 2 == 0) ? 1 : 2;//cet ligne est a remettre au moment de la reception du random number
-        //apres avoir demandé le numéro random il faut qu'on enregistre le request id en mode mapping ID => duelId
         duels[_duelId].status = Status.Launched;
-        // Dans la fonction de reception on fera le tirage et on passera le duel en status claimable
 
         emit DuelLaunched(_duelId, duels[_duelId].player1, msg.sender, msg.value, duels[_duelId].winner);
     }
 
+    //function called by chainlink coordinator to return the generated random number, override
     function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
         setWinner(requestId, randomness);
     }
@@ -312,8 +310,6 @@ contract DuelCrypto is VRFConsumerBase, Ownable, ReentrancyGuard {
 
         emit DuelRewardClaimed(_duelId, msg.sender, ((duels[_duelId].bet * 2 * (100 - feeOnWinnings)) / 100) + 1);
     }
-
-    //function called by chainlink coordinator to return the generated random number 
 
     /**
      * @notice Returns true if `account` is a contract.
